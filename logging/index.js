@@ -2,53 +2,43 @@ const winston = require('winston');
 const winstonDaily = require('winston-daily-rotate-file');
 const path = require('path');
 
-const logDir = path.join(path.dirname(require.main.filename), process.env.LOG_LOCATION);
-const { combine, timestamp, printf } = winston.format;
-
-// Log format
-const logFormat = printf(info => {
-  return `${info.timestamp} ${info.level}: ${info.message}`;
-});
-
 // Log Level
 // error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
+
+const { combine, timestamp, printf } = winston.format;
+
+const logDirectory = path.join(path.dirname(require.main.filename), process.env.LOG_LOCATION);
+const logFormat = printf(log => `${log.timestamp} ${log.level}: ${log.message}`);
+
 const logger = winston.createLogger({
-  format: combine(
-    timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss',
-    }),
-    logFormat,
-  ),
+  format: combine(timestamp({
+    format: 'YYYY-MM-DD HH:mm:ss',
+  }), logFormat),
+
   transports: [
-    // info 레벨 로그를 저장할 파일 설정
+    // log file for info level
     new winstonDaily({
       level: 'info',
       datePattern: 'YYYY-MM-DD',
-      dirname: logDir,
+      dirname: logDirectory,
       filename: `%DATE%.log`,
-      maxFiles: 30,  // 30일치 로그 파일 저장
-      zippedArchive: true, 
+      maxFiles: 30,
+      zippedArchive: true
     }),
 
-    // error 레벨 로그를 저장할 파일 설정
+    // log file for error level
     new winstonDaily({
       level: 'error',
       datePattern: 'YYYY-MM-DD',
-      dirname: path.join(logDir + 'error'),
+      dirname: path.join(logDirectory, 'error'),
       filename: `%DATE%.error.log`,
       maxFiles: 30,
-      zippedArchive: true,
-    }),
-  ],
+      zippedArchive: true
+    })]
 });
 
-if(process.env.PROFILE !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.simple(),
-    )
-  }));
-}
+process.env.PROFILE === 'dev' && logger.add(new winston.transports.Console({
+  format: winston.format.combine(winston.format.colorize(), winston.format.simple())
+}));
 
 module.exports = logger;
