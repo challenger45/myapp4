@@ -3,6 +3,7 @@ const path = require('path');
 const Sequelize = require('sequelize');
 var AWS = require("aws-sdk");
 const model = require('../model');
+const logger = require('../logging');
 
 module.exports = {
     upload: async function(req, res) {
@@ -38,6 +39,6 @@ const storePhoto = async function(file) {
 
         return stored.Location;
     } catch (err) {
-        console.error(err)
+        logger.error(err)
     }
 }

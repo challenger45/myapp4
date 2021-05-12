@@ -11,6 +11,7 @@ dotenv.config({path: path.join(__dirname, 'config/db.env')})
 dotenv.config({path: path.join(__dirname, 'config/store.env')})
 
 const router = require('./routes/route');
+const logger = require('./logging');
 
 // application setup
 const application = express()
@@ -32,7 +33,7 @@ const application = express()
 // server startup
 http.createServer(application)
     .on('listening', function(){
-        console.log('Listening on port ' + process.env.PORT);
+        logger.info('Listening on port ' + process.env.PORT);
     })
     .on('error', function(error) {
         if(error.syscall !== 'listen') {
@@ -42,11 +43,11 @@ http.createServer(application)
         // handle specific listen errors
         switch(error.code) {
             case 'EACCES':
-                console.error('Port ' + process.env.PORT + ' requires elevated privileges');
+                logger.error('Port ' + process.env.PORT + ' requires elevated privileges');
                 process.exit(1);
                 break;
             case 'EADDRINUSE':
-                console.error('Port ' + process.env.PORT + ' is already in use');
+                logger.error('Port ' + process.env.PORT + ' is already in use');
                 process.exit(1);
                 break;
             default:
