@@ -31,5 +31,5 @@ ParameterKey=ServicePort,ParameterValue=8080 /
 ParameterKey=DBName,ParameterValue=myapp / 
 ParameterKey=DBUserName,ParameterValue=myapp /
 ParameterKey=DBUserPassword,ParameterValue={password}
-ParameterKey=BucketName,ParameterValue=aws.bitacademy
+ParameterKey=BucketName,ParameterValue={yourBucketName}
 ```
