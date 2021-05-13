@@ -18,7 +18,6 @@
 #### 5. services: sysvinit enable and start
 
 ### 5. Deployment: Creating Stack
-### 4. Deployment: Creating Stack
 ```bash
 $ aws cloudformation create-stack /
 --stack-name myapp /
@@ -31,4 +30,5 @@ ParameterKey=ServicePort,ParameterValue=8080 /
 ParameterKey=DBName,ParameterValue=myapp / 
 ParameterKey=DBUserName,ParameterValue=myapp /
 ParameterKey=DBUserPassword,ParameterValue={password}
+ParameterKey=BucketName,ParameterValue=aws.bitacademy
 ```
