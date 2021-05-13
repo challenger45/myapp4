@@ -22,7 +22,7 @@ const storePhoto = async function(file) {
         const content = fs.readFileSync(file.path);
 
         const key = path.join(process.env.AWS_S3_BUCKET_OBJECT_KEY_PREFIX, file.filename) + path.extname(file.originalname);
-        logger.info('key:' + key);
+
         const params = {
             Body: content,
             Bucket: process.env.AWS_S3_BUCKET_NAME,
